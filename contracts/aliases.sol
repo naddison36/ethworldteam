@@ -32,8 +32,11 @@ contract Aliases
     // TODO need to receive an Alias struct rather than string
     function getAccountDetails(string alias) returns (string BICFI, string accountIdentifier)
     {
+        Account account = aliases[alias];
+        
         // TODO need to convert storage string to memory string
-        //BICFI = aliases[alias].BICFI;
+        //BICFI = account.getBICFI();
+        //accountIdentifier = account.getIdentifier();
     }
     
     // TODO ideally a Alias struct would be passed in

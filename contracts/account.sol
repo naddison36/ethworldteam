@@ -1,11 +1,18 @@
 contract Account
 {
-    string BICFI;        // identifier of the financial institution that holds the account
-    string identifier;   // account number
+    string private _BICFI;        // identifier of the financial institution that holds the account
+    string private _identifier;   // account number
     
-    string AccountType;  // TODO move to an enum
-    string currency; //TODO move to an enum or validate against reference data
-    string name;  // name of the account
+    string private _accountType;  // TODO move to an enum
+    string private _currency; //TODO move to an enum or validate against reference data
+    string private _name;  // name of the account
+    
+    function getBICFI() returns (string BICFI) {return _BICFI;}
+    function getIdentifier() returns (string identifier) {return _identifier;}
+    
+    function getAccountType() returns (string accountType) {return _accountType;}
+    function getCurrency() returns (string currency) {return _currency;}
+    function getName() returns (string name) {return _name;}
     
     // List of account owner's identifies (addresses)
     // An Account Owner(s) can't link their aliases to the account unless their identities are in this list
@@ -18,9 +25,20 @@ contract Account
     // Or can it be restricted to just the FI that holds the account?
     event addedIdentity(Account account, address addedAccountOwnerIdentity);
     
-    function Account(address FI_identity)
+    function Account(address FI_identity,
+        string BICFI,
+        string identifier,
+        string accountType,
+        string currency,
+        string name)
     {
         _FI_identity = FI_identity;
+        
+        _BICFI = BICFI;
+        _identifier = identifier;
+        _accountType = accountType;
+        _currency = currency;
+        _name = name;
     }
     
     // if identity in list of accountOwnerIdentities return true
