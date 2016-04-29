@@ -54,4 +54,7 @@ contract Aliases
     {
         
     }
+    
+    // return ether if someone sends to this contract's address
+    function() { throw; }
 }

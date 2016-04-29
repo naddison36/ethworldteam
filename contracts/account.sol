@@ -1,11 +1,11 @@
 contract Account
 {
-    string public BICFI;        // identifier of the financial institution that holds the account
-    string public identifier;   // account number
+    string BICFI;        // identifier of the financial institution that holds the account
+    string identifier;   // account number
     
-    string public AccountType;  // TODO move to an enum
-    string public currency; //TODO move to an enum or validate against reference data
-    string public name;  // name of the account
+    string AccountType;  // TODO move to an enum
+    string currency; //TODO move to an enum or validate against reference data
+    string name;  // name of the account
     
     // List of account owner's identifies (addresses)
     // An Account Owner(s) can't link their aliases to the account unless their identities are in this list
@@ -40,6 +40,11 @@ contract Account
         }
     }
     
+    function isCallerFIHoldingAccount() returns (bool success)
+    {
+        success = (_FI_identity == msg.sender);
+    }
+    
     // add's an account owners identity to this account
     // this can only be done by the Financial Institution that holds the account
     function addIdentity(address accountOwnerIdentity) returns (bool success)
@@ -69,4 +74,7 @@ contract Account
         
         success = false;
     }
+    
+    // return ether if someone sends to this contract's address
+    function() { throw; }
 }
