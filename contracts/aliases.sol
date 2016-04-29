@@ -37,23 +37,16 @@ contract Aliases
     }
     
     // TODO ideally a Alias struct would be passed in
-    function createAlias(string alias, string BICFI, string accountIdentifier) returns (bool returnSuccess)
+    function createAlias(string alias, string BICFI, string accountIdentifier) returns (bool success)
     {
         Account account;
         
-        bool getAccountSuccess = true;
-        // TODO how do I get a singleton instance of FinancialInstitutions?
-        (getAccountSuccess, account) = _fis.getAccount.value(10).gas(800)(BICFI, accountIdentifier);
-        //bool getAccountSuccess = true;
+        // TODO what values should the value and gas be set to?
+        (success, account) = _fis.getAccount.value(10).gas(800)(BICFI, accountIdentifier);
         
-        if (getAccountSuccess)
+        if (success)
         {
             aliases[alias] = account;
-            returnSuccess = true;
-        }
-        else
-        {
-            returnSuccess = false;
         }
     }
     

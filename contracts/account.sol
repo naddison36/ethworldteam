@@ -1,10 +1,10 @@
 contract Account
 {
-    string public BICFI;
-    string public identifier;
+    string public BICFI;        // identifier of the financial institution that holds the account
+    string public identifier;   // account number
     
     string public AccountType;  // TODO move to an enum
-    string public currency; //TODO move to an enum or reference data
+    string public currency; //TODO move to an enum or validate against reference data
     string public name;  // name of the account
     
     // List of account owner's identifies (addresses)
@@ -18,8 +18,7 @@ contract Account
     // Or can it be restricted to just the FI that holds the account?
     event addedIdentity(Account account, address addedAccountOwnerIdentity);
     
-    function Account(
-        address FI_identity)
+    function Account(address FI_identity)
     {
         _FI_identity = FI_identity;
     }
@@ -28,12 +27,21 @@ contract Account
     // else return false
     function isCallerAnAccountOwner() returns (bool success)
     {
-        // TODO need to look though list as there can be more than one account owner
-        success = (_accountOwnerIdentities[0] == msg.sender);
+        success = false;
+        
+        // look though list of registered identities as there can be more than one account owner
+        for (uint i = 0; i < _accountOwnerIdentities.length; i++)
+        {
+            if (_accountOwnerIdentities[i] == msg.sender)
+            {
+                success = true;
+                return;
+            }
+        }
     }
     
     // add's an account owners identity to this account
-    // this can only be done by the Financial Institution that owns the account
+    // this can only be done by the Financial Institution that holds the account
     function addIdentity(address accountOwnerIdentity) returns (bool success)
     {
         // check the identity of the caller matches the Financial Institution that holds this account
@@ -43,8 +51,17 @@ contract Account
             return;
         }
         
+        // check that the address has not been previously added
+        for (uint i = 0; i < _accountOwnerIdentities.length; i++)
+        {
+            if (_accountOwnerIdentities[i] == accountOwnerIdentity)
+            {
+                success = false;
+                return;
+            }
+        }
+        
         // add new account owners identity to list of identities
-        // TODO need to check that the address has not already been added
         _accountOwnerIdentities.push(accountOwnerIdentity);
         
         // emit event for adding identity to this account
