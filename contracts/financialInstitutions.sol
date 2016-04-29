@@ -1,50 +1,68 @@
 
 import "account.sol";
+import "financialInstitution.sol";
 
 contract FinancialInstitutions
 {
-    struct FinancialInstitution
+    // Maps Business Identification Codes for each Financial Institution (BICFI) to the FI structure. eg name and accounts
+    mapping(string => FinancialInstitution) private _financialInstitutions;
+    
+    // creates a new FinancialInstitution contract and adds it to the list of FI's
+    function createFinancialInstitution(string BICFI, string name, string postalAddress)
     {
-        // identity of the Financial Institution.
-        // Only calls from this identy will be able to update the data in this structure. eg the accounts and their assiciated identities
-        address identity;
+        // TODO need multi sig that the identity (external account) creating the FI belongs to the FI being created
         
-        string name;  // name of the Financial Institution
-        // TODO move to an address struct
-        string postalAddress; // postal address of the Financial Institution
-        
-        // Map of account identifiers to Account structures.
-        // Example identifiers are 
-        // * Australia: BSB and account number
-        // * Europe: IBAN
-        // * Canada: ?
-        // * US: ?
-        mapping(string => Account) accounts;
+        // TODO need to create new FI contract. See replicator.sol example for how to do this
+        // _financialInstitutions[BICFI] = FinancialInstitution(name, postalAddress);
     }
     
-    // Maps Business Identification Codes for each Financial Institution (BICFI) to the FI structure. eg name and accounts
-    mapping(string => FinancialInstitution) private financialInstitutions;
+    enum AliasTypes { Email, Mobile, BIC, Facebook, Bitcoin, Ethereum }
+    
+    struct Alias
+    {
+        AliasTypes AliasType;  // TODO move to an enum
+        Account account;
+    }
+    
+    // mapping of aliases to Accounts
+    // alias could be just the alias string or
+    // a hash of the alias string and type
+    mapping(string => Account) private _aliases;
     
     /**
-     * return an Account if the following conditions are met
+     * Creates an alias mapped to an account if the following conditions are met
      * 1. The BICFI can be found in the financialInstitutions map
-     * 2. The accountIdentifier is in the accounts map
-     * 3. The accountOwnerIdentity (External Owner Account) has been associated with the account by the financial institution
+     * 2. The accountIdentifier is in the FI's accounts map
+     * 3. The caller (External Account) has previously been associated with the account by the financial institution
      */
-    function getAccount(string BICFI, string accountIdentifier, address accountOwnerIdentity) public returns (Account returnAccount)
+    function createAlias(string alias, string BICFI, string accountIdentifier) returns (bool success)
     {
-        FinancialInstitution fi = financialInstitutions[BICFI];
+        // get Financial Institution using the Business Identification Code for the Financial Institution
+        FinancialInstitution fi = _financialInstitutions[BICFI];
         
-        // TODO need to handle if the BICFI has not been mapped
-        // if (fi)
-        // {
-            // TODO need to handle if the account has not been mapped by the FI
-            Account account = fi.accounts[accountIdentifier];
-            
-            if (account.isIdentityAccountOwner(accountOwnerIdentity) )
-            {
-                returnAccount = account;
-            }
-        // }
+        // try and get the account using the identity of the caller
+        Account account;
+        (success, account) = fi.getAccount(accountIdentifier);
+        
+        if (success)
+        {
+            _aliases[alias] = account;
+        }
     }
+    
+    //function getAccount(string alias) returns (bool success, Account account)
+    function getAccount(string BICFI, string accountIdentifier) returns (bool success, Account account)
+    {
+        FinancialInstitution fi = _financialInstitutions[BICFI];
+        
+        // TODO check if an fi was returned
+        
+        (success, account) = fi.getAccount(accountIdentifier);
+        
+        // TODO check if an account was returned
+        success = true;
+    }
+    
+    // return ether if someone sends to this contract's address
+    function() { throw; }
 }
