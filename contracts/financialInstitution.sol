@@ -30,19 +30,26 @@ contract FinancialInstitution
     // * US: ?
     mapping(string => Account) private _accounts;
     
-    function addAccount(string accountIdentifier, string accountType, string currency, string name) returns (bool success, Account account)
+    event AccountAdded(Account);
+    event AccountRemoved(Account);
+    event AccountGet(Account);
+    
+    function addAccount(Account account) returns (bool success)
     {
         // TODO check that the account has not already been added
         
         // only the Financial Institution that created this contract can add new accounts
-        if (_financialInstitutionIdentity != msg.sender)
+        if (_financialInstitutionIdentity != msg.sender ||
+            !account.isCallerFIHoldingAccount() )
         {
             success = false;
             return;
         }
         
-        // create new account. TODO need to find out how to create a contract from another contract
-        // Account(_BICFI, accountIdentifier, accountType, currency, name);
+        // TODO the compiler is complaining: type tuple() is not implicitly convertible to expected type string memory.
+        //_accounts[account.getIdentifier()] = account;
+        
+        AccountAdded(account);
     }
     
     function getAccount(string accountIdentifier) returns (bool success, Account returnAccount)

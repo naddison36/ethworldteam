@@ -23,7 +23,7 @@ contract Account
     // publishes an event when an account owner's identity has been successfully been added to an account
     // TODO this might not be a good idea. Can anyone filter for this event?
     // Or can it be restricted to just the FI that holds the account?
-    event addedIdentity(Account account, address addedAccountOwnerIdentity);
+    event IdentityAdded(Account account, address addedAccountOwnerIdentity);
     
     function Account(address FI_identity,
         string BICFI,
@@ -88,7 +88,7 @@ contract Account
         _accountOwnerIdentities.push(accountOwnerIdentity);
         
         // emit event for adding identity to this account
-        addedIdentity(this, accountOwnerIdentity);
+        IdentityAdded(this, accountOwnerIdentity);
         
         success = false;
     }

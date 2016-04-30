@@ -20,9 +20,8 @@ contract Aliases
         _fis = FinancialInstitutions(financialInstitutionsInstance);
     }
     
-    // TODO need to get events compiling. Compiler complaining the paramers are of internal type
-    // event AliasAdded(Alias alias, Account account);
-    // event AliasDeleted(Alias alias, Account account);
+    event AliasAdded(string alias, Account account);
+    event AliasDeleted(string alias, Account account);
     
     // mapping of alias to Account
     // alias could be just the alias string or
@@ -50,12 +49,27 @@ contract Aliases
         if (success)
         {
             aliases[alias] = account;
+            
+            AliasAdded(alias, account);
         }
     }
     
     function deleteAlias(string alias) returns (bool success)
     {
+        Account deletedAccount = aliases[alias];
         
+        // TODO how to check if an alias was not mapped?
+        // if (!deletedAccount)
+        // {
+        //     return false;
+        // }
+        
+        //TODO how to remove a mapping?
+        //aliases[alias] = x0;
+        
+        AliasAdded(alias, deletedAccount);
+            
+        return true;
     }
     
     // return ether if someone sends to this contract's address
