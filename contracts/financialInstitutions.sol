@@ -8,13 +8,16 @@ contract FinancialInstitutions
     mapping(string => FinancialInstitution) private _financialInstitutions;
     
     // creates a new FinancialInstitution contract and adds it to the list of FI's
-    function createFinancialInstitution(string BICFI, string name, string postalAddress)
+    function createFinancialInstitution(string BICFI, string name, string postalAddress) returns (FinancialInstitution newFI)
     {
         // TODO need multi sig that the identity (external account) creating the FI belongs to the FI being created
         // could be % of registered FI's. Number of FI's. All FI's
         
         // Create new FI contract
         _financialInstitutions[BICFI] = new FinancialInstitution(BICFI, name, postalAddress);
+        
+        // return the newly created FI
+        return _financialInstitutions[BICFI];
     }
     
     //function getAccount(string alias) returns (bool success, Account account)

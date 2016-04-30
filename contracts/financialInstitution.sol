@@ -11,6 +11,9 @@ contract FinancialInstitution
     // TODO move to an address struct
     string private _postalAddress; // postal address of the Financial Institution
     
+    function getBICFI() returns (string BICFI) {return _BICFI;}
+    function getName() returns (string name) {return _name;}
+    
     // constructor
     function FinancialInstitution(string BICFI, string name, string postalAddress)
     {
