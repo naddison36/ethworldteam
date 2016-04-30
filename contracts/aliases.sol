@@ -29,13 +29,15 @@ contract Aliases
     mapping(string => Account) private aliases;
     
     // TODO need to receive an Alias struct rather than string
-    function getAccountDetails(string alias) returns (string BICFI, string accountIdentifier)
+    // currently returning bytes32 as it can implicity convert between storage and memory
+    function getAccountDetails(string alias) returns (bytes32 BICFI, bytes32 accountIdentifier)
     {
         Account account = aliases[alias];
         
         // TODO need to convert storage string to memory string
-        //BICFI = account.getBICFI();
-        //accountIdentifier = account.getIdentifier();
+        //  If structs or arrays (including bytes and string) are assigned from a state variable to a local variable, the local variable holds a reference to the original state variable.
+        BICFI = account.getBICFI();
+        accountIdentifier = account.getIdentifier();
     }
     
     // TODO ideally a Alias struct would be passed in

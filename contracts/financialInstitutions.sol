@@ -13,8 +13,8 @@ contract FinancialInstitutions
         // TODO need multi sig that the identity (external account) creating the FI belongs to the FI being created
         // could be % of registered FI's. Number of FI's. All FI's
         
-        // TODO need to create new FI contract. See replicator.sol example for how to do this
-        // _financialInstitutions[BICFI] = FinancialInstitution(BICFI, name, postalAddress);
+        // Create new FI contract
+        _financialInstitutions[BICFI] = new FinancialInstitution(BICFI, name, postalAddress);
     }
     
     //function getAccount(string alias) returns (bool success, Account account)

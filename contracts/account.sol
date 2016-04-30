@@ -1,14 +1,15 @@
 contract Account
 {
-    string private _BICFI;        // identifier of the financial institution that holds the account
-    string private _identifier;   // account number
+    // using bytes32 rather than string as it can implicity convert between storage and memory
+    bytes32 private _BICFI;        // identifier of the financial institution that holds the account
+    bytes32 private _identifier;   // account number
     
     string private _accountType;  // TODO move to an enum
     string private _currency; //TODO move to an enum or validate against reference data
     string private _name;  // name of the account
     
-    function getBICFI() returns (string BICFI) {return _BICFI;}
-    function getIdentifier() returns (string identifier) {return _identifier;}
+    function getBICFI() returns (bytes32 BICFI) {return _BICFI;}
+    function getIdentifier() returns (bytes32 identifier) {return _identifier;}
     
     function getAccountType() returns (string accountType) {return _accountType;}
     function getCurrency() returns (string currency) {return _currency;}
@@ -26,8 +27,8 @@ contract Account
     event IdentityAdded(Account account, address addedAccountOwnerIdentity);
     
     function Account(address FI_identity,
-        string BICFI,
-        string identifier,
+        bytes32 BICFI,
+        bytes32 identifier,
         string accountType,
         string currency,
         string name)
