@@ -1,5 +1,5 @@
-import "account.sol";
-import "financialInstitutions.sol";
+import "Account.sol";
+import "FinancialInstitutions.sol";
 
 contract Aliases
 {
@@ -61,7 +61,7 @@ contract Aliases
         Account deletedAccount = aliases[alias];
         
         // TODO how to check if an alias was not mapped?
-        // if (!deletedAccount)
+        // if (deletedAccount == 0x)
         // {
         //     return false;
         // }

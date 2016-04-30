@@ -1,6 +1,6 @@
 
-import "account.sol";
-import "financialInstitution.sol";
+import "Account.sol";
+import "FinancialInstitution.sol";
 
 contract FinancialInstitutions
 {

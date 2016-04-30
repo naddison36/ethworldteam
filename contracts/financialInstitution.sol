@@ -1,4 +1,4 @@
-import "account.sol";
+import "Account.sol";
 
 contract FinancialInstitution
 {
